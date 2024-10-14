@@ -1,7 +1,8 @@
 from rest_framework import viewsets, permissions
-from .models import Auteur, Categorie, Exemplaire, Emprunt, Commentaire, Editeur, Evaluation
+from .models import Auteur, Livre, Categorie, Exemplaire, Emprunt, Commentaire, Editeur, Evaluation
 from .serializers import (
     AuteurSerializer,
+    LivreSerializer,
     CategorieSerializer,
     ExemplaireSerializer,
     EmpruntSerializer,
@@ -13,6 +14,11 @@ from .serializers import (
 class AuteurViewSet(viewsets.ModelViewSet):
     queryset = Auteur.objects.all()
     serializer_class = AuteurSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class LivreViewSet(viewsets.ModelViewSet):
+    queryset = Livre.objects.all()
+    serializer_class = LivreSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class CategorieViewSet(viewsets.ModelViewSet):
