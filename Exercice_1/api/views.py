@@ -10,11 +10,20 @@ from .serializers import (
     EditeurSerializer,
     EvaluationSerializer
 )
+from .paginations import AuteurPagination
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 class AuteurViewSet(viewsets.ModelViewSet):
     queryset = Auteur.objects.all()
     serializer_class = AuteurSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = AuteurPagination
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ["date_de_naissance"]
+    search_fields = ["nom", "biographie"]
+    ordering_fields = ['nom', 'date_de_naissance']
+    ordering = ['date_de_naissance'] 
 
 class LivreViewSet(viewsets.ModelViewSet):
     queryset = Livre.objects.all()
