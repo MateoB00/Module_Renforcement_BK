@@ -9,4 +9,3 @@ admin.site.register(models.Emprunt)
 admin.site.register(models.Commentaire)
 admin.site.register(models.Editeur)
 admin.site.register(models.Evaluation)
-

@@ -8,12 +8,19 @@ from .serializers import (
     EmpruntSerializer,
     CommentaireSerializer,
     EditeurSerializer,
-    EvaluationSerializer
+    EvaluationSerializer, 
+    CustomTokenObtainPairSerializer,
 )
 from .paginations import AuteurPagination, LivrePagination
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from .permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+    throttle_classes = [UserRateThrottle, AnonRateThrottle]
 
 class AuteurViewSet(viewsets.ModelViewSet):
     queryset = Auteur.objects.all()

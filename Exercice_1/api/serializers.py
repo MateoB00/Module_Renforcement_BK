@@ -1,5 +1,32 @@
 from rest_framework import serializers
 from .models import Auteur, Livre, Categorie, Exemplaire, Emprunt, Commentaire, Editeur, Evaluation
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth import authenticate
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(required=True, write_only=True)
+
+    def validate(self, attrs):
+        user = authenticate(username=attrs['username'], password=attrs['password'])
+
+        if user is None:
+            raise serializers.ValidationError('Invalid credentials')
+
+        token = self.get_token(user)
+
+        token['username'] = user.username
+        token['email'] = user.email
+
+        return {
+            'access': str(token.access_token),
+            'refresh': str(token),
+        }
+
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        return token
 
 class AuteurSerializer(serializers.ModelSerializer):
     class Meta:
